@@ -11,15 +11,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class VideoService {
 	private final Map<UUID, Video> inMemoryDatabase = new HashMap<>();
-	
+
 	public List<Video> getAllVideos() {
-        return new ArrayList<>(inMemoryDatabase.values());
-    }
-	
+		return new ArrayList<>(inMemoryDatabase.values());
+	}
+
+	public Video getVideoById(UUID id) {
+		return inMemoryDatabase.get(id);
+	}
+
 	public Video createVideo(Video video) {
 		UUID uuid = UUID.randomUUID();
-	    video.setId(uuid);
-	    inMemoryDatabase.put(uuid, video);
-	    return video;
+		video.setId(uuid);
+		inMemoryDatabase.put(uuid, video);
+		return video;
 	}
 }
