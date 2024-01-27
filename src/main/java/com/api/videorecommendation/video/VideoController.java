@@ -46,6 +46,20 @@ public class VideoController {
 		}
 	}
 
+	@GetMapping("/search/{title}")
+	public ResponseEntity<List<Video>> getVideosByTitle(@PathVariable String title) {
+		try {
+			List<Video> matchingVideos = videoService.getVideosByTitle(title);
+			if (!matchingVideos.isEmpty()) {
+				return new ResponseEntity<>(matchingVideos, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping
 	public ResponseEntity<Video> createVideo(@RequestBody Video video) {
 		try {

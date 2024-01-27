@@ -60,4 +60,22 @@ class VideoControllerIntegrationTest {
 				.andExpect(jsonPath("$.labels", hasItems("sci-fi", "dystopia")));
 	}
 
+	@Test
+	public void givenTitle_whenGetVideosByTitle_thenStatus200() throws Exception {
+		Video video1 = new Video(UUID.randomUUID(), "matrix", List.of("sci-fi", "dystopia"));
+		Video video2 = new Video(UUID.randomUUID(), "indiana jones", List.of("adventurers", "action"));
+		Video video3 = new Video(UUID.randomUUID(), "les indestructibles", List.of("comedy", "action"));
+
+		videoService.createVideo(video1);
+		videoService.createVideo(video2);
+		videoService.createVideo(video3);
+
+		String titleInput = "ind";
+
+		mockMvc.perform(get("/api/video/search/{title}", titleInput)).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$[0].title").value(video2.getTitle()))
+				.andExpect(jsonPath("$[1].title").value(video3.getTitle()));
+	}
+
 }

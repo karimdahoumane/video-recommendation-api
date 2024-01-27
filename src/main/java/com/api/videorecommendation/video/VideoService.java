@@ -20,6 +20,17 @@ public class VideoService {
 		return inMemoryDatabase.get(id);
 	}
 
+	public List<Video> getVideosByTitle(String title) {
+		List<Video> matchingVideos = new ArrayList<>();
+
+		for (Video video : inMemoryDatabase.values()) {
+			if (video.getTitle().toLowerCase().contains(title.toLowerCase()) && title.length() >= 3) {
+				matchingVideos.add(video);
+			}
+		}
+		return matchingVideos;
+	}
+
 	public Video createVideo(Video video) {
 		UUID uuid = UUID.randomUUID();
 		video.setId(uuid);
