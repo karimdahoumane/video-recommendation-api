@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.api.videorecommendation.utils.LabelUtils;
+
 @Service
 public class VideoService {
 	private final Map<UUID, Video> inMemoryDatabase = new HashMap<>();
@@ -50,4 +52,19 @@ public class VideoService {
 				.map(video -> (Show) video).collect(Collectors.toList());
 		return shows;
 	}
+
+	public List<Video> getSimilarVideos(Video originalVideo, int minCommonLabels) {
+		List<Video> similarVideos = new ArrayList<>();
+
+		for (Video video : inMemoryDatabase.values()) {
+			if (!video.getId().equals(originalVideo.getId())) {
+				int commonLabels = LabelUtils.countCommonLabels(originalVideo.getLabels(), video.getLabels());
+				if (commonLabels >= minCommonLabels) {
+					similarVideos.add(video);
+				}
+			}
+		}
+		return similarVideos;
+	}
+
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -93,6 +94,21 @@ public class VideoController {
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/similar")
+	public ResponseEntity<List<Video>> getSimilarVideos(@RequestParam UUID id, @RequestParam int minCommonLabels) {
+		try {
+			Video originalVideo = videoService.getVideoById(id);
+			if (originalVideo == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+
+			List<Video> similarVideos = videoService.getSimilarVideos(originalVideo, minCommonLabels);
+			return new ResponseEntity<>(similarVideos, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

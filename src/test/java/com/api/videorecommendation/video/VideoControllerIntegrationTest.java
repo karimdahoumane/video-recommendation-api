@@ -1,6 +1,7 @@
 package com.api.videorecommendation.video;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -120,5 +121,25 @@ public class VideoControllerIntegrationTest {
 				.andExpect(jsonPath("$", hasSize(1)))
 				.andExpect(jsonPath("$[*].title", containsInAnyOrder(show.getTitle())))
 				.andExpect(jsonPath("$[*].number_of_episodes", containsInAnyOrder(show.getNumberOfEpisodes())));
+	}
+
+	@Test
+	public void givenVideoAndLabels_whenGetSimilarVideos_thenStatus200() throws Exception {
+		Video video1 = new Video(UUID.randomUUID(), "matrix", List.of("sci-fi", "dystopia"));
+		Video video2 = new Video(UUID.randomUUID(), "indiana jones", List.of("adventurers", "action"));
+		Video video3 = new Video(UUID.randomUUID(), "les indestructibles", List.of("comedy", "action"));
+		int minCommonLabels = 1;
+		String expectedCommonLabel = "action";
+
+		videoService.createVideo(video1);
+		videoService.createVideo(video2);
+		videoService.createVideo(video3);
+
+		mockMvc.perform(get("/api/video/similar?id={id}&minCommonLabels={minCommonLabels}", video2.getId().toString(),
+				minCommonLabels)).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].title").value(video3.getTitle()))
+				.andExpect(jsonPath("$[0].labels", hasSize(2)))
+				.andExpect(jsonPath("$[0].labels", hasItem(expectedCommonLabel)));
 	}
 }
