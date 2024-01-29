@@ -7,7 +7,7 @@ This is a mini system for recommending videos via a REST API. It includes endpoi
 ## Stack technique
 
 ![Java](https://img.shields.io/badge/Java%2017-%23ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring](https://img.shields.io/badge/Spring%205.3.24-%236DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Spring](https://img.shields.io/badge/Spring-%236DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot%203.2.2-%6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white)  
 ![JUnit](https://img.shields.io/badge/JUnit-AE2922?style=for-the-badge&logo=junit5&logoColor=25A162)  
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
@@ -64,7 +64,7 @@ mvnw.cmd clean install
 
 | Path variable | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `title` | `string` | **Required**. Title of video to be searched (min 3 characters) |
+| `title` | `string` | **Required**. Title of video to be searched (Minimum: 3 characters) |
 
 #### Create video
 
