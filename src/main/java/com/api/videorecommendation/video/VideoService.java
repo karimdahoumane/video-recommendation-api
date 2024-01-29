@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,17 @@ public class VideoService {
 		video.setId(uuid);
 		inMemoryDatabase.put(uuid, video);
 		return video;
+	}
+
+	public List<Movie> getAllMovies() {
+		List<Movie> movies = inMemoryDatabase.values().stream().filter(video -> video instanceof Movie)
+				.map(video -> (Movie) video).collect(Collectors.toList());
+		return movies;
+	}
+
+	public List<Show> getAllShows() {
+		List<Show> shows = inMemoryDatabase.values().stream().filter(video -> video instanceof Show)
+				.map(video -> (Show) video).collect(Collectors.toList());
+		return shows;
 	}
 }

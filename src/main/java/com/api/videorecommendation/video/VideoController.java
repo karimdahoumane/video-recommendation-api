@@ -70,4 +70,32 @@ public class VideoController {
 		}
 	}
 
+	@GetMapping("/movies")
+	public ResponseEntity<List<Movie>> getAllMovies() {
+		try {
+			List<Movie> movies = videoService.getAllMovies();
+			if (!movies.isEmpty()) {
+				return new ResponseEntity<>(movies, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/shows")
+	public ResponseEntity<List<Show>> getAllShows() {
+		try {
+			List<Show> shows = videoService.getAllShows();
+			if (!shows.isEmpty()) {
+				return new ResponseEntity<>(shows, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }
