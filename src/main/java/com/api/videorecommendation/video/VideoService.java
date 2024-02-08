@@ -24,14 +24,9 @@ public class VideoService {
 	}
 
 	public List<Video> getVideosByTitle(String title) {
-		List<Video> matchingVideos = new ArrayList<>();
-
-		for (Video video : inMemoryDatabase.values()) {
-			if (video.getTitle().toLowerCase().contains(title.toLowerCase()) && title.length() >= 3) {
-				matchingVideos.add(video);
-			}
-		}
-		return matchingVideos;
+		return inMemoryDatabase.values().stream()
+				.filter(video -> video.getTitle().toLowerCase().contains(title.toLowerCase()) && title.length() >= 3)
+				.collect(Collectors.toList());
 	}
 
 	public Video createVideo(Video video) {
@@ -42,29 +37,19 @@ public class VideoService {
 	}
 
 	public List<Movie> getAllMovies() {
-		List<Movie> movies = inMemoryDatabase.values().stream().filter(video -> video instanceof Movie)
-				.map(video -> (Movie) video).collect(Collectors.toList());
-		return movies;
+		return inMemoryDatabase.values().stream().filter(video -> video instanceof Movie).map(video -> (Movie) video)
+				.collect(Collectors.toList());
 	}
 
 	public List<Show> getAllShows() {
-		List<Show> shows = inMemoryDatabase.values().stream().filter(video -> video instanceof Show)
-				.map(video -> (Show) video).collect(Collectors.toList());
-		return shows;
+		return inMemoryDatabase.values().stream().filter(video -> video instanceof Show).map(video -> (Show) video)
+				.collect(Collectors.toList());
 	}
 
 	public List<Video> getSimilarVideos(Video originalVideo, int minCommonLabels) {
-		List<Video> similarVideos = new ArrayList<>();
-
-		for (Video video : inMemoryDatabase.values()) {
-			if (!video.getId().equals(originalVideo.getId())) {
-				int commonLabels = LabelUtils.countCommonLabels(originalVideo.getLabels(), video.getLabels());
-				if (commonLabels >= minCommonLabels) {
-					similarVideos.add(video);
-				}
-			}
-		}
-		return similarVideos;
+		return inMemoryDatabase.values().stream().filter(video -> !video.getId().equals(originalVideo.getId())).filter(
+				video -> LabelUtils.countCommonLabels(originalVideo.getLabels(), video.getLabels()) >= minCommonLabels)
+				.collect(Collectors.toList());
 	}
 
 }
